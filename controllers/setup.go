@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	v1 "golangPrac/controllers/v1"
 )
 
 // CORSMiddleware ...
@@ -17,7 +18,7 @@ func CORSMiddleware() gin.HandlerFunc {
 }
 
 type Controller struct {
-	UserController
+	v1.UserController
 }
 
 func SetupRouter() *gin.Engine {

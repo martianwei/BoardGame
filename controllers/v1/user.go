@@ -1,4 +1,4 @@
-package controllers
+package v1
 
 import (
 	"golangPrac/models"
@@ -41,7 +41,14 @@ func (u *UserController) CreateUser(c *gin.Context) {
 		Password: req.Password,
 	}
 
-	models.DB.Create(&user)
+	if err := models.DB.Create(&user).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, utils.Response{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		})
+		return
+	}
 
 	c.JSON(http.StatusOK, utils.Response{
 		Success: true,
