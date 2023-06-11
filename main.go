@@ -4,13 +4,13 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/joho/godotenv"
-	"golangPrac/controllers"
-	"golangPrac/models"
+	"BoardGame/configs"
+	"BoardGame/controllers"
+	"BoardGame/models"
 )
 
 func main() {
-	godotenv.Load()
+	configs.LoadConfig(".")
 	handler := controllers.SetupRouter()
 	server := &http.Server{
 		Addr:    "0.0.0.0:8008",

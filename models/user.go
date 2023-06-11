@@ -13,8 +13,3 @@ type User struct {
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updated_at"`
 }
-
-type CreateUserRequest struct {
-	Name     string `json:"name"`
-	Password string `json:"password"`
-}
