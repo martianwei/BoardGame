@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lib/pq"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -55,13 +54,20 @@ func (f *FormationController) CreateFormation(c *gin.Context) {
 		return
 	}
 
+	// Convert the Formation's Strategy to string literals
+	strategyValues := make([]string, len(req.Formation.Strategy))
+	for i, rank := range req.Formation.Strategy {
+		strategyValues[i] = rank.String()
+	}
+
 	formation := &models.Formation{
 		ID:       uuid.NewV4(),
 		UserID:   req.UserID,
 		Name:     req.Formation.Name,
-		Strategy: pq.Int32Array(req.Formation.Strategy),
+		Strategy: strategyValues,
 	}
 
+	// Execute the create operation using GORM's Create method
 	if err := models.DB.Create(formation).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, utils.Response{
 			Success: false,
@@ -70,6 +76,8 @@ func (f *FormationController) CreateFormation(c *gin.Context) {
 		})
 		return
 	}
+
+	// ...
 
 	c.JSON(http.StatusOK, utils.Response{
 		Success: true,
