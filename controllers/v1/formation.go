@@ -39,49 +39,49 @@ func (f *FormationController) GetFormation(c *gin.Context) {
 	})
 }
 
-func (f *FormationController) CreateFormation(c *gin.Context) {
-	var req struct {
-		UserID    uuid.UUID        `json:"user_id"`
-		Formation models.Formation `json:"formation"`
-	}
+// func (f *FormationController) CreateFormation(c *gin.Context) {
+// 	var req struct {
+// 		UserID    uuid.UUID        `json:"user_id"`
+// 		Formation models.Formation `json:"formation"`
+// 	}
 
-	if validationErr := c.ShouldBindJSON(&req); validationErr != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, utils.Response{
-			Success: false,
-			Message: validationErr.Error(),
-			Data:    nil,
-		})
-		return
-	}
+// 	if validationErr := c.ShouldBindJSON(&req); validationErr != nil {
+// 		c.AbortWithStatusJSON(http.StatusBadRequest, utils.Response{
+// 			Success: false,
+// 			Message: validationErr.Error(),
+// 			Data:    nil,
+// 		})
+// 		return
+// 	}
 
-	// Convert the Formation's Strategy to string literals
-	strategyValues := make([]string, len(req.Formation.Strategy))
-	for i, rank := range req.Formation.Strategy {
-		strategyValues[i] = rank.String()
-	}
+// 	// Convert the Formation's Strategy to string literals
+// 	strategyValues := make([]string, len(req.Formation.Strategy))
+// 	for i, rank := range req.Formation.Strategy {
+// 		strategyValues[i] = rank.String()
+// 	}
 
-	formation := &models.Formation{
-		ID:       uuid.NewV4(),
-		UserID:   req.UserID,
-		Name:     req.Formation.Name,
-		Strategy: strategyValues,
-	}
+// 	formation := &models.Formation{
+// 		ID:       uuid.NewV4(),
+// 		UserID:   req.UserID,
+// 		Name:     req.Formation.Name,
+// 		Strategy: strategyValues,
+// 	}
 
-	// Execute the create operation using GORM's Create method
-	if err := models.DB.Create(formation).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, utils.Response{
-			Success: false,
-			Message: "Failed to create formation",
-			Data:    nil,
-		})
-		return
-	}
+// 	// Execute the create operation using GORM's Create method
+// 	if err := models.DB.Create(formation).Error; err != nil {
+// 		c.AbortWithStatusJSON(http.StatusInternalServerError, utils.Response{
+// 			Success: false,
+// 			Message: "Failed to create formation",
+// 			Data:    nil,
+// 		})
+// 		return
+// 	}
 
-	// ...
+// 	// ...
 
-	c.JSON(http.StatusOK, utils.Response{
-		Success: true,
-		Message: "Formation created",
-		Data:    formation,
-	})
-}
+// 	c.JSON(http.StatusOK, utils.Response{
+// 		Success: true,
+// 		Message: "Formation created",
+// 		Data:    formation,
+// 	})
+// }

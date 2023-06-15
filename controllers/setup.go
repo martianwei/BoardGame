@@ -48,7 +48,7 @@ func SetupRouter() *gin.Engine {
 	formation := router.Group("/formation")
 	{
 		formation.GET("/", restAPI.GetFormation)
-		formation.POST("/", restAPI.CreateFormation)
+		// formation.POST("/", restAPI.CreateFormation)
 		// formation.PUT("/", restAPI.UpdateFormation)
 		// formation.DELETE("/", restAPI.DeleteFormation)
 	}
