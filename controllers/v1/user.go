@@ -12,31 +12,32 @@ import (
 type UserController struct{}
 
 func (u *UserController) GetUser(c *gin.Context) {
-	id, err := uuid.FromString(c.Query("id"))
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, utils.Response{
-			Success: false,
-			Message: "Invalid user id",
-			Data:    nil,
-		})
-		return
-	}
-	var user models.User
+	c.JSON(http.StatusOK, gin.H{"message": "user successful"})
+	// id, err := uuid.FromString(c.Query("id"))
+	// if err != nil {
+	// 	c.AbortWithStatusJSON(http.StatusBadRequest, utils.Response{
+	// 		Success: false,
+	// 		Message: "Invalid user id",
+	// 		Data:    nil,
+	// 	})
+	// 	return
+	// }
+	// var user models.User
 
-	if err := models.DB.Where("id = ?", id).First(&user).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, utils.Response{
-			Success: false,
-			Message: "User not found",
-			Data:    nil,
-		})
-		return
-	}
+	// if err := models.DB.Where("id = ?", id).First(&user).Error; err != nil {
+	// 	c.AbortWithStatusJSON(http.StatusNotFound, utils.Response{
+	// 		Success: false,
+	// 		Message: "User not found",
+	// 		Data:    nil,
+	// 	})
+	// 	return
+	// }
 
-	c.JSON(http.StatusOK, utils.Response{
-		Success: true,
-		Message: "User found",
-		Data:    user,
-	})
+	// c.JSON(http.StatusOK, utils.Response{
+	// 	Success: true,
+	// 	Message: "User found",
+	// 	Data:    user,
+	// })
 }
 
 func (u *UserController) CreateUser(c *gin.Context) {

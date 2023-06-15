@@ -5,14 +5,15 @@ import (
 )
 
 type Config struct {
-	PORT        int    `mapstructure:"PORT"`
-	ENV         string `mapstructure:"dev"`
-	DB          string `mapstructure:"DB"`
-	DB_HOST     string `mapstructure:"DB_HOST"`
-	DB_USER     string `mapstructure:"DB_USER"`
-	DB_PASSWORD string `mapstructure:"DB_PASSWORD"`
-	DB_NAME     string `mapstructure:"DB_NAME"`
-	DB_PORT     string `mapstructure:"DB_PORT"`
+	PORT           int    `mapstructure:"PORT"`
+	ENV            string `mapstructure:"dev"`
+	DB             string `mapstructure:"DB"`
+	DB_HOST        string `mapstructure:"DB_HOST"`
+	DB_USER        string `mapstructure:"DB_USER"`
+	DB_PASSWORD    string `mapstructure:"DB_PASSWORD"`
+	DB_NAME        string `mapstructure:"DB_NAME"`
+	DB_PORT        string `mapstructure:"DB_PORT"`
+	JWT_SECRET_KEY string `mapstructure:"JWT_SECRET_KEY"`
 }
 
 var Cfg Config
@@ -27,7 +28,7 @@ func LoadConfig(path string) (err error) {
 	viper.SetDefault("DB_PASSWORD", "admin")
 	viper.SetDefault("DB_NAME", "BoardGame")
 	viper.SetDefault("DB_PORT", "5432")
-
+	viper.SetDefault("JWT_SECRET_KEY", "secret")
 	viper.AddConfigPath(path)
 	viper.SetConfigName(".env")
 	viper.SetConfigType("env")
