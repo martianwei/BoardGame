@@ -10,7 +10,9 @@ import (
 )
 
 func main() {
-	configs.LoadConfig(".")
+	log.Println("Server starting...")
+	configs.LoadConfig("./env/")
+	log.Println("JWT_SECRET_KEY: ", configs.Cfg.JWT_SECRET_KEY)
 	handler := controllers.SetupRouter()
 	server := &http.Server{
 		Addr:    "0.0.0.0:8008",

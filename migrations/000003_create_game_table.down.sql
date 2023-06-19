@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS game_histories;
+DROP TABLE IF EXISTS games;

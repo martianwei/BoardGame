@@ -12,3 +12,16 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=BoardGame
+  boardgame-server:
+    container_name: boardgame-server
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    networks:
+      - default
+    ports:
+      - 8008:8008
+    env_file:
+      - ./env/DEV.env
+    depends_on:
+      - progresql

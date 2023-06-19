@@ -19,6 +19,6 @@ CREATE TABLE IF NOT EXISTS game_histories (
     user_id UUID NOT NULL,
     move_from  VARCHAR(255) NOT NULL,
     move_to  VARCHAR(255) NOT NULL,
-    FOREIGN KEY (game_id) REFERENCES game(id),
+    FOREIGN KEY (game_id) REFERENCES games(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

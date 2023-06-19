@@ -30,7 +30,7 @@ func LoadConfig(path string) (err error) {
 	viper.SetDefault("DB_PORT", "5432")
 	viper.SetDefault("JWT_SECRET_KEY", "secret")
 	viper.AddConfigPath(path)
-	viper.SetConfigName(".env")
+	viper.SetConfigName("DEV.env")
 	viper.SetConfigType("env")
 	if err = viper.ReadInConfig(); err != nil {
 		return err
