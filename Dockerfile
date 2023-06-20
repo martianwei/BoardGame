@@ -11,4 +11,4 @@ RUN apk add --no-cache make
 COPY . .
 
 # Set the command to run when the container starts
-CMD ["make","run-boardgame"]
+CMD ["go","run","main.go"]

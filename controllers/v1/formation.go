@@ -3,11 +3,12 @@ package v1
 import (
 	"BoardGame/models"
 	"BoardGame/utils"
-	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
+	"gorm.io/gorm"
 )
 
 type FormationController struct{}
@@ -47,49 +48,50 @@ func (f *FormationController) CreateFormation(c *gin.Context) {
 		FormationElements []models.FormationElement `json:"formation_elements"`
 	}
 
-	// 	if validationErr := c.ShouldBindJSON(&req); validationErr != nil {
-	// 		c.AbortWithStatusJSON(http.StatusBadRequest, utils.Response{
-	// 			Success: false,
-	// 			Message: validationErr.Error(),
-	// 			Data:    nil,
-	// 		})
-	// 		return
-	// 	}
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, utils.Response{
+			Success: false,
+			Message: "Invalid request data",
+			Data:    err.Error(),
+		})
+		return
+	}
 
 	formation := &models.Formation{
-		ID:     uuid.NewV4(),
-		UserID: req.UserID,
-		Name:   req.Name,
+		ID:        uuid.NewV4(),
+		UserID:    req.UserID,
+		Name:      req.Name,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
-	// 	// Execute the create operation using GORM's Create method
-	// 	if err := models.DB.Create(formation).Error; err != nil {
-	// 		c.AbortWithStatusJSON(http.StatusInternalServerError, utils.Response{
-	// 			Success: false,
-	// 			Message: "Failed to create formation",
-	// 			Data:    nil,
-	// 		})
-	// 		return
-	// 	}
-
-	// Create FormationElements
-	for _, element := range req.FormationElements {
-		element.ID = uuid.NewV4()
-		element.FormationID = formation.ID
-
-		if err := models.DB.Create(&element).Error; err != nil {
-			// If there is an error creating a FormationElement, rollback the transaction and delete the created Formation
-			models.DB.Rollback()
-			models.DB.Delete(formation)
-			c.AbortWithStatusJSON(http.StatusInternalServerError, utils.Response{
-				Success: false,
-				Message: "Failed to create formation elements",
-				Data:    nil,
-			})
-			return
+	// 创建 Formation
+	err = models.DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(formation).Error; err != nil {
+			return err
 		}
+
+		// 创建 FormationElements
+		for i := range req.FormationElements {
+			req.FormationElements[i].FormationID = formation.ID
+		}
+		if err := tx.Create(&req.FormationElements).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, utils.Response{
+			Success: false,
+			Message: "Failed to create formation",
+			Data:    err.Error(),
+		})
+		return
 	}
-	log.Println(utils.CommanderInChief)
+
 	c.JSON(http.StatusOK, utils.Response{
 		Success: true,
 		Message: "Formation created",

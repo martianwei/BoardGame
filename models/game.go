@@ -3,14 +3,11 @@ package models
 import (
 	"time"
 
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 )
 
 type Game struct {
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey;" json:"id"`
-	Player1ID uuid.UUID `gorm:"type:uuid;not null" json:"player1_id"`
-	Player2ID uuid.UUID `gorm:"type:uuid;not null" json:"player2_id"`
-	Player3ID uuid.UUID `gorm:"type:uuid;not null" json:"player3_id"`
-	Player4ID uuid.UUID `gorm:"type:uuid;not null" json:"player4_id"`
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
+	ID          uuid.UUID     `gorm:"type:uuid;primaryKey;" json:"id"`
+	CreatedAt   time.Time     `gorm:"autoCreateTime" json:"created_at"`
+	GameHistory []GameHistory `gorm:"foreignKey:GameID" json:"game_history"`
 }

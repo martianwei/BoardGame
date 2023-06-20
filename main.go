@@ -11,7 +11,8 @@ import (
 
 func main() {
 	log.Println("Server starting...")
-	configs.LoadConfig("./env/")
+	// configs.LoadConfig("./env/")
+	configs.LoadConfig("./")
 	log.Println("JWT_SECRET_KEY: ", configs.Cfg.JWT_SECRET_KEY)
 	handler := controllers.SetupRouter()
 	server := &http.Server{
