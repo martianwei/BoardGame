@@ -54,6 +54,7 @@ func (ws *WebSocketController) HandleWebSocket(c *gin.Context) {
 		return
 	}
 	room, exists := rooms[roomID]
+	room.Lock.Lock()
 	if exists {
 		if len(room.Clients) >= 4 {
 			log.Println("Room is full")
@@ -65,7 +66,6 @@ func (ws *WebSocketController) HandleWebSocket(c *gin.Context) {
 		room = createRoom(roomID)
 		rooms[roomID] = room
 	}
-	room.Lock.Lock()
 	room.Clients[conn] = true
 	room.Lock.Unlock()
 
@@ -76,17 +76,19 @@ func (ws *WebSocketController) HandleWebSocket(c *gin.Context) {
 		conn.Close()
 	}()
 
-	for {
-		var message Message
-		err := conn.ReadJSON(&message)
-		if err != nil {
-			log.Println("WebSocket read error:", err)
-			break
-		}
+	go func() {
+		for {
+			var message Message
+			err := conn.ReadJSON(&message)
+			if err != nil {
+				log.Println("WebSocket read error:", err)
+				break
+			}
 
-		message.RoomID = roomID
-		room.Broadcast <- message
-	}
+			message.RoomID = roomID
+			room.Broadcast <- message
+		}
+	}()
 }
 
 func createRoom(roomID string) *Room {
